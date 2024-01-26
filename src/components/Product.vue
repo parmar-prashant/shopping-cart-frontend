@@ -25,87 +25,87 @@ export default {
                 images: {
                     main: [
                         {
-                            path: '/src/assets/images/product-image.jpeg',
+                            path: './src/assets/images/product-image.jpeg',
                             isVideo: false
                         },
                         {
-                            path: '/src/assets/images/product-image-front.jpeg',
+                            path: './src/assets/images/product-image-front.jpeg',
                             isVideo: false
                         },
                         {
-                            path: '/src/assets/images/product-image-back.jpeg',
+                            path: './src/assets/images/product-image-back.jpeg',
                             isVideo: false
                         },
                         {
-                            path: '/src/assets/images/video-thumbnail.png',
+                            path: './src/assets/images/video-thumbnail.png',
                             id: 0,
                             isVideo: true
                         },
                         {
-                            path: '/src/assets/images/video-thumbnail.png',
+                            path: './src/assets/images/video-thumbnail.png',
                             id: 1,
                             isVideo: true
                         },
                         {
-                            path: '/src/assets/images/video-thumbnail.png',
+                            path: './src/assets/images/video-thumbnail.png',
                             id: 2,
                             isVideo: true
                         }
                     ],
                     thumbnail: [
                         {
-                            path: '/src/assets/images/product-image-thumbnail.jpeg',
+                            path: './src/assets/images/product-image-thumbnail.jpeg',
                             isVideo: false
                         },
                         {
-                            path: '/src/assets/images/product-image-front-thumbnail.jpeg',
+                            path: './src/assets/images/product-image-front-thumbnail.jpeg',
                             isVideo: false
                         },
                         {
-                            path: '/src/assets/images/product-image-back-thumbnail.jpeg',
+                            path: './src/assets/images/product-image-back-thumbnail.jpeg',
                             isVideo: false
                         },
                         {
-                            path: '/src/assets/images/video-thumbnail.png',
+                            path: './src/assets/images/video-thumbnail.png',
                             id: 0,
                             isVideo: true
                         },
                         {
-                            path: '/src/assets/images/video-thumbnail.png',
+                            path: './src/assets/images/video-thumbnail.png',
                             id: 1,
                             isVideo: true
                         },
                         {
-                            path: '/src/assets/images/video-thumbnail.png',
+                            path: './src/assets/images/video-thumbnail.png',
                             id: 2,
                             isVideo: true
                         }
                     ],
                     zoomed: [
                         {
-                            path: '/src/assets/images/product-image-large.jpeg',
+                            path: './src/assets/images/product-image-large.jpeg',
                             isVideo: false
                         },
                         {
-                            path: '/src/assets/images/product-image-front-large.jpeg',
+                            path: './src/assets/images/product-image-front-large.jpeg',
                             isVideo: false
                         },
                         {
-                            path: '/src/assets/images/product-image-back-large.jpeg',
+                            path: './src/assets/images/product-image-back-large.jpeg',
                             isVideo: false
                         },
                         {
-                            path: '/src/assets/images/video-thumbnail.png',
+                            path: './src/assets/images/video-thumbnail.png',
                             id: 0,
                             isVideo: true
                         },
                         {
-                            path: '/src/assets/images/video-thumbnail.png',
+                            path: './src/assets/images/video-thumbnail.png',
                             id: 1,
                             isVideo: true
                         },
                         {
-                            path: '/src/assets/images/video-thumbnail.png',
+                            path: './src/assets/images/video-thumbnail.png',
                             id: 2,
                             isVideo: true
                         }
@@ -113,16 +113,16 @@ export default {
                 },
                 videos: [
                     {
-                        thumbnail: '/src/assets/images/video-thumbnail.png',
-                        url: '/src/assets/videos/1.mp4'
+                        thumbnail: './src/assets/images/video-thumbnail.png',
+                        url: './src/assets/videos/1.mp4'
                     },
                     {
-                        thumbnail: '/src/assets/images/video-thumbnail.png',
-                        url: '/src/assets/videos/2.mp4'
+                        thumbnail: './src/assets/images/video-thumbnail.png',
+                        url: './src/assets/videos/2.mp4'
                     },
                     {
-                        thumbnail: '/src/assets/images/video-thumbnail.png',
-                        url: '/src/assets/videos/3.mp4'
+                        thumbnail: './src/assets/images/video-thumbnail.png',
+                        url: './src/assets/videos/3.mp4'
                     }
                 ],
                 details: {
