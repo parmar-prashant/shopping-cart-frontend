@@ -32,7 +32,8 @@
                 <template v-slot:image>
                     <div class="grid grid-rows-2 relative sm:grid-cols-4">
                         <div class="flex col-span-3 items-center justify-center m-2">
-                            <img :src="product.images.zoomed[currentIndex].path" class="w-60 h-80 sm:w-64 h-80" />
+                            <img :src="product.images.zoomed[currentIndex].path" class="w-60 h-80 sm:w-64 h-80"
+                                @touchstart="touchHandler" ref="modalImage"/>
                         </div>
                         <div class="p-5 border-4">
                             <p class="font-bold text-md">{{ productNameWithColorFormat }}</p>
@@ -84,23 +85,26 @@ export default {
             isZoomed: false,
             isSmallScreen: false,
             tabs: [
-                { id: "image", label: 'Image' , visible: true},
-                { id: "video", label: 'Video' , visible: true},
+                { id: "image", label: 'Image', visible: true },
+                { id: "video", label: 'Video', visible: true },
             ],
+            touch: 0,
+            touchGapTimer: null,
+            isZoomIn: false
         }
     },
     computed: {
         getImageArrayMaxLength() {
             var counter = 0;
             this.product.images.main.map((item) => {
-                if(!item.isVideo) counter++;
+                if (!item.isVideo) counter++;
             });
             return counter;
         },
         getVideoArrayMaxLength() {
             var counter = 0;
             this.product.images.main.map((item) => {
-                if(item.isVideo) counter++;
+                if (item.isVideo) counter++;
             });
             return counter;
         },
@@ -143,6 +147,32 @@ export default {
         screenSizeTracker() {
             this.currentIndex = 0;
             this.isSmallScreen = window.innerWidth < 640;
+        },
+        touchHandler(event) {
+            this.touch++;
+            console.log(this.touch, event.touches[0].clientX);
+            if (this.touch === 2) {
+                const modalImage = this.$refs.modalImage;
+                const modalRect = modalImage.getBoundingClientRect();
+
+                const x = event.touches[0].clientX - modalRect.left;
+                const y = event.touches[0].clientY - modalRect.top;
+                
+                if(this.isZoomIn) {
+                    modalImage.style.transformOrigin = 'initial';
+                    modalImage.style.transform = `scale(1, 1)`;
+                    this.isZoomIn = false;
+                } else {
+                    modalImage.style.transformOrigin = `${x}px ${y}px`;
+                    modalImage.style.transform = `scale(3, 3)`;
+                    this.isZoomIn = true;
+                }
+                this.touch = 0;
+                console.log(modalImage);
+            }
+        },
+        isDoubleTap() {
+
         }
     },
     mounted() {
@@ -190,4 +220,5 @@ export default {
 .videoPlayer {
     width: 300px;
     height: 300px;
-}</style>
+}
+</style>
