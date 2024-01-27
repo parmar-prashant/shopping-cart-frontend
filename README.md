@@ -1,4 +1,4 @@
-# The Big Phone Store - Front Test Project
+# The Big Phone Store - Frontend Test Project
 
 This project uses Vue 3, Tailwind CSS framework with no external libraries.
 
@@ -14,8 +14,23 @@ The project has the basic folder structure as of a Vue 3 template with the follo
 - *ProductImage.vue*: Component used to display product media files in a slider form.
 - *ProductDetail.vue*: Component used to display textual information of a product.
 
-## Application hierarchy
+## Application component hierarchy
 
+![alt text](https://github.com/parmar-prashant/the-big-phone-store-frontend/blob/main/Component%20Tree.jpeg)
 
+## How to run the project
 
-## *Note: As per the requirement, I have kept the Product, ProductImage and ProductDetail directly under the Components folder. In real-time *
+The following are the ways to run the project:
+
+- Local setup on your system:
+  - Install Node and npm.
+  - Install Vue CLI using npm.
+  - Download the whole project and run the following commands:
+    - `npm install`: This will install all the required packages listed in the package.json file.
+    - `npm run dev`: This will start the project locally and you can run it in the browser of your choice.
+- Project is deployed on Netlify and you can view [here](https://prashant-parmar.netlify.app)
+
+## Note
+
+- As per the requirement, I have kept the Product, ProductImage and ProductDetail directly under the Components folder. In real-time application there will be folder for each main component and child components related to it.
+- All the mordern applications are responsive now a days. for this project I have created single component working in responsive manner when viewed either on desktop or mobile device. For real time application we can have mobile component and desktop component for a single feature to have a firm control over design and complex business logic.
