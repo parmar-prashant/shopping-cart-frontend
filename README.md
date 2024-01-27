@@ -1,29 +1,21 @@
-# big-phone-store-frontend
+# The Big Phone Store - Front Test Project
 
-This template should help get you started developing with Vue 3 in Vite.
+This project uses Vue 3, Tailwind CSS framework with no external libraries.
 
-## Recommended IDE Setup
+## Folder Structure
 
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur) + [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin).
+The project has the basic folder structure as of a Vue 3 template with the following sub-directories in the *src* folder:
 
-## Customize configuration
+- *Components Folder*:
+  - *Custom*: This folder holds the custom UI components for use across the various components for better code reusability and maintenance e.g. Modal Popup.
+  - *Shared*: This folder holds the custom shared components for use within a single component or across different components e.g. Thumbnail viewer.
+  - *Skeleton*: This folder holds the custom components such as a header, footer, body and navigation panel for better structuring of the application.
+- *Product.vue*: Component used to display product details with media and textual information.
+- *ProductImage.vue*: Component used to display product media files in a slider form.
+- *ProductDetail.vue*: Component used to display textual information of a product.
 
-See [Vite Configuration Reference](https://vitejs.dev/config/).
+## Application hierarchy
 
-## Project Setup
 
-```sh
-npm install
-```
 
-### Compile and Hot-Reload for Development
-
-```sh
-npm run dev
-```
-
-### Compile and Minify for Production
-
-```sh
-npm run build
-```
+## *Note: As per the requirement, I have kept the Product, ProductImage and ProductDetail directly under the Components folder. In real-time *
