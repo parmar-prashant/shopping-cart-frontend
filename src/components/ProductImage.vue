@@ -11,7 +11,8 @@
                     <path stroke-linecap="round" stroke-linejoin="round"
                         d="M5.25 5.653c0-.856.917-1.398 1.667-.986l11.54 6.347a1.125 1.125 0 0 1 0 1.972l-11.54 6.347a1.125 1.125 0 0 1-1.667-.986V5.653Z" />
                 </svg>
-                <img :src="product.images.main[this.currentIndex].path" class="w-60 h-60" ref="zoomImage" />
+                <img :src="product.images.main[this.currentIndex].path" class="w-60 h-60" ref="zoomImage"
+                    @touchstart="onTouchStart" @touchmove="onTouchMove" @touchend="onTouchEnd" />
                 <div v-show="!product.images.main[this.currentIndex].isVideo && isZoomed" class="zoomedImage"
                     ref="zoomedImage">
                     <img :src="product.images.zoomed[this.currentIndex].path" class="w-60 h-60" />
@@ -34,12 +35,13 @@
                     <div class="grid grid-rows-2 relative sm:grid-cols-4">
                         <div class="flex col-span-3 items-center justify-center m-2 relative">
                             <img :src="product.images.zoomed[currentIndex].path" class="w-60 h-80 sm:w-64 h-80"
-                                @touchstart="touchHandler" ref="modalImage" />
+                                @touchstart="touchHandler($event); onTouchStart($event)" @touchmove="onTouchMove" @touchend="onTouchEnd"
+                                ref="modalImage" />
                         </div>
                         <div class="p-5 border-4 h-fit">
                             <p class="font-bold text-md">{{ productNameWithColorFormat }}</p>
-                            <Thumbnail :thumbnails="product.images.thumbnail" contentType="image"
-                                @syncCurrentIndex="displaySelectedMedia" :currentIndex="currentIndex"></Thumbnail>
+                            <Thumbnail :thumbnails=" product.images.thumbnail " contentType="image"
+                                @syncCurrentIndex=" displaySelectedMedia " :currentIndex=" currentIndex "></Thumbnail>
                         </div>
                     </div>
                 </template>
@@ -47,17 +49,17 @@
                     <div class="grid grid-rows-2 relative sm:grid-cols-4 hidden sm:block">
                         <div class="flex col-span-3 items-center justify-center m-2">
                             <video class="videoPlayer" controls controlsList="nodownload nofullscreen noremoteplayback"
-                                :key="product.images.main[currentIndex].id">
-                                <template v-if="product.images.main[currentIndex].id !== undefined">
-                                    <source :src="product.videos[product.images.main[currentIndex].id].url"
+                                :key=" product.images.main[currentIndex].id ">
+                                <template v-if=" product.images.main[currentIndex].id !== undefined ">
+                                    <source :src=" product.videos[product.images.main[currentIndex].id].url "
                                         type="video/mp4">
                                 </template>
                             </video>
                         </div>
                         <div class="p-5 border-4">
                             <p class="font-bold text-md">{{ productNameWithColorFormat }}</p>
-                            <Thumbnail :thumbnails="product.images.thumbnail" contentType="video"
-                                @syncCurrentIndex="displaySelectedMedia" :currentIndex="currentIndex"></Thumbnail>
+                            <Thumbnail :thumbnails=" product.images.thumbnail " contentType="video"
+                                @syncCurrentIndex=" displaySelectedMedia " :currentIndex=" currentIndex "></Thumbnail>
                         </div>
                     </div>
                 </template>
@@ -95,7 +97,9 @@ export default {
             touch: {
                 start: 0,
                 end: 0
-            }
+            },
+            intitialTouchTime: null,
+            isPopupZoomMode: false
         }
     },
     computed: {
@@ -155,22 +159,40 @@ export default {
         },
         touchHandler(event) {
             this.tap++;
+
+            if (this.tap === 1) {
+                this.intitialTouchTime = Date.now();
+            }
             if (this.tap === 2) {
+                var difference = Date.now() - this.intitialTouchTime;
+                var isValidDoubleClick = false;
+                console.log(this.intitialTouchTime, difference);
+                if (difference < 200) {
+                    isValidDoubleClick = true;
+                } else {
+                    console.log('not proper double click');
+                }
+                this.tap = 0;
+                this.intitialTouchTime = null;
+            }
+
+            if (isValidDoubleClick) {
                 const modalImage = this.$refs.modalImage;
                 const modalRect = modalImage.getBoundingClientRect();
 
                 const x = event.touches[0].clientX - modalRect.left;
                 const y = event.touches[0].clientY - modalRect.top;
 
-                if (this.isZoomIn) {
+                if (this.isPopupZoomMode) {
                     modalImage.style.transformOrigin = 'initial';
                     modalImage.style.transform = `scale(1, 1)`;
-                    this.isZoomIn = false;
+                    this.isPopupZoomMode = false;
                 } else {
                     modalImage.style.transformOrigin = `${x}px ${y}px`;
                     modalImage.style.transform = `scale(3, 3)`;
-                    this.isZoomIn = true;
+                    this.isPopupZoomMode = true;
                 }
+                modalImage.style.transition = 'transform 0.3s ease';
                 this.tap = 0;
             }
         },
@@ -182,7 +204,7 @@ export default {
             this.touch.end = event.touches[0].clientX;
         },
         onTouchEnd() {
-            if (Math.abs(this.touch.end - this.touch.start) > 100 && this.touch.end !== 0) {
+            if (!this.isPopupZoomMode && Math.abs(this.touch.end - this.touch.start) > 100 && this.touch.end !== 0) {
                 if (this.touch.end < this.touch.start) {
                     this.next();
                 } else {
@@ -193,11 +215,11 @@ export default {
         }
     },
     mounted() {
-        this.$nextTick(() => {
-            window.addEventListener('touchstart', (event) => this.onTouchStart(event));
-            window.addEventListener('touchmove', (event) => this.onTouchMove(event));
-            window.addEventListener('touchend', () => this.onTouchEnd());
-        });
+        // this.$nextTick(() => {
+        //     window.addEventListener('touchstart', (event) => this.onTouchStart(event, false));
+        //     window.addEventListener('touchmove', (event) => this.onTouchMove(event));
+        //     window.addEventListener('touchend', () => this.onTouchEnd());
+        // });
         this.screenSizeTracker();
         window.addEventListener('resize', this.screenSizeTracker);
     },
