@@ -11,8 +11,7 @@
                     <path stroke-linecap="round" stroke-linejoin="round"
                         d="M5.25 5.653c0-.856.917-1.398 1.667-.986l11.54 6.347a1.125 1.125 0 0 1 0 1.972l-11.54 6.347a1.125 1.125 0 0 1-1.667-.986V5.653Z" />
                 </svg>
-                <img :src="product.images.main[this.currentIndex].path" class="w-60 h-60" ref="zoomImage"
-                    @touchstart="onTouchstart" @touchend="onTouchEnd" @touchmove="onTouchMove" />
+                <img :src="product.images.main[this.currentIndex].path" class="w-60 h-60" ref="zoomImage" />
                 <div v-show="!product.images.main[this.currentIndex].isVideo && isZoomed" class="zoomedImage"
                     ref="zoomedImage">
                     <img :src="product.images.zoomed[this.currentIndex].path" class="w-60 h-60" />
@@ -176,10 +175,8 @@ export default {
             }
         },
         onTouchStart(event) {
-            console.log('event', event);
             this.touch.start = event.touches[0].clientX;
             this.touch.end = 0;
-            console.log(this.touch);
         },
         onTouchMove(event) {
             this.touch.end = event.touches[0].clientX;
@@ -187,15 +184,20 @@ export default {
         onTouchEnd() {
             if (Math.abs(this.touch.end - this.touch.start) > 100 && this.touch.end !== 0) {
                 if (this.touch.end < this.touch.start) {
-                    console.log('next');
+                    this.next();
                 } else {
-                    console.log('previous');
+                    this.previous();
                 }
             }
             this.touch.start = this.touch.end = 0;
         }
     },
     mounted() {
+        this.$nextTick(() => {
+            window.addEventListener('touchstart', (event) => this.onTouchStart(event));
+            window.addEventListener('touchmove', (event) => this.onTouchMove(event));
+            window.addEventListener('touchend', () => this.onTouchEnd());
+        });
         this.screenSizeTracker();
         window.addEventListener('resize', this.screenSizeTracker);
     },
