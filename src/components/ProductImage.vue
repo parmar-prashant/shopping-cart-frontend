@@ -11,7 +11,8 @@
                     <path stroke-linecap="round" stroke-linejoin="round"
                         d="M5.25 5.653c0-.856.917-1.398 1.667-.986l11.54 6.347a1.125 1.125 0 0 1 0 1.972l-11.54 6.347a1.125 1.125 0 0 1-1.667-.986V5.653Z" />
                 </svg>
-                <img :src="product.images.main[this.currentIndex].path" class="w-60 h-60" ref="zoomImage" />
+                <img :src="product.images.main[this.currentIndex].path" class="w-60 h-60" ref="zoomImage"
+                    @touchstart="onTouchstart" @touchend="onTouchEnd" @touchmove="onTouchMove" />
                 <div v-show="!product.images.main[this.currentIndex].isVideo && isZoomed" class="zoomedImage"
                     ref="zoomedImage">
                     <img :src="product.images.zoomed[this.currentIndex].path" class="w-60 h-60" />
@@ -30,12 +31,13 @@
         <modal v-show="showModal" @closeModal="showModal = false">
             <Tab :tabs="tabs">
                 <template v-slot:image>
+                    <span class="text-xs italic text-rose-950">Double tap on image to zoom in/out.</span>
                     <div class="grid grid-rows-2 relative sm:grid-cols-4">
-                        <div class="flex col-span-3 items-center justify-center m-2">
+                        <div class="flex col-span-3 items-center justify-center m-2 relative">
                             <img :src="product.images.zoomed[currentIndex].path" class="w-60 h-80 sm:w-64 h-80"
-                                @touchstart="touchHandler" ref="modalImage"/>
+                                @touchstart="touchHandler" ref="modalImage" />
                         </div>
-                        <div class="p-5 border-4">
+                        <div class="p-5 border-4 h-fit">
                             <p class="font-bold text-md">{{ productNameWithColorFormat }}</p>
                             <Thumbnail :thumbnails="product.images.thumbnail" contentType="image"
                                 @syncCurrentIndex="displaySelectedMedia" :currentIndex="currentIndex"></Thumbnail>
@@ -88,9 +90,13 @@ export default {
                 { id: "image", label: 'Image', visible: true },
                 { id: "video", label: 'Video', visible: true },
             ],
-            touch: 0,
+            tap: 0,
             touchGapTimer: null,
-            isZoomIn: false
+            isZoomIn: false,
+            touch: {
+                start: 0,
+                end: 0
+            }
         }
     },
     computed: {
@@ -149,16 +155,15 @@ export default {
             this.isSmallScreen = window.innerWidth < 640;
         },
         touchHandler(event) {
-            this.touch++;
-            console.log(this.touch, event.touches[0].clientX);
-            if (this.touch === 2) {
+            this.tap++;
+            if (this.tap === 2) {
                 const modalImage = this.$refs.modalImage;
                 const modalRect = modalImage.getBoundingClientRect();
 
                 const x = event.touches[0].clientX - modalRect.left;
                 const y = event.touches[0].clientY - modalRect.top;
-                
-                if(this.isZoomIn) {
+
+                if (this.isZoomIn) {
                     modalImage.style.transformOrigin = 'initial';
                     modalImage.style.transform = `scale(1, 1)`;
                     this.isZoomIn = false;
@@ -167,12 +172,27 @@ export default {
                     modalImage.style.transform = `scale(3, 3)`;
                     this.isZoomIn = true;
                 }
-                this.touch = 0;
-                console.log(modalImage);
+                this.tap = 0;
             }
         },
-        isDoubleTap() {
-
+        onTouchStart(event) {
+            console.log('event', event);
+            this.touch.start = event.touches[0].clientX;
+            this.touch.end = 0;
+            console.log(this.touch);
+        },
+        onTouchMove(event) {
+            this.touch.end = event.touches[0].clientX;
+        },
+        onTouchEnd() {
+            if (Math.abs(this.touch.end - this.touch.start) > 100 && this.touch.end !== 0) {
+                if (this.touch.end < this.touch.start) {
+                    console.log('next');
+                } else {
+                    console.log('previous');
+                }
+            }
+            this.touch.start = this.touch.end = 0;
         }
     },
     mounted() {

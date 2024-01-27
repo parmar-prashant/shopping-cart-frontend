@@ -35,7 +35,7 @@ export default {
 
 .modal-content {
   background: white;
-  padding: 20px;
+  padding: 10px;
   border-radius: 8px;
   width: 50%;
   height: 75%;

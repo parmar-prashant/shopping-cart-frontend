@@ -59,7 +59,7 @@ export default {
 }
 
 .tab-content {
-    padding: 20px;
+    padding: 5px;
 }
 </style>
   
