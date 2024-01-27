@@ -1,9 +1,15 @@
 <template>
     <div class="grid grid-cols-2 gap-2">
         <div class="flex place-content-center col-span-2 sm:col-span-1">
+            <!--
+                Usage of ProductImage component which displays the media of the product.
+            -->
             <ProductImage :product="productList[0]" />
         </div>
         <div class="col-span-2 sm:col-span-1">
+            <!--
+                Usage of ProductDetail component which displays the textual information of the product.
+            -->
             <ProductDetail :detail="productList[0].details" />
         </div>
     </div>
@@ -13,6 +19,11 @@
 import ProductImage from "./ProductImage.vue";
 import ProductDetail from "./ProductDetail.vue";
 
+/**
+* This component is a parent component for ProductImage and ProductDetails components.
+* Currently the I have kept all the data static but this would be the component if I was supposed to get the data
+  from an API call and then pass on the data to child components.
+*/
 export default {
     name: 'Product',
     components: {
@@ -21,6 +32,10 @@ export default {
     },
     data() {
         return {
+            /**
+             * Property holding all the details such as media (images and videos) and textual details of a given product.
+             * All the product will have thumbnail images, main images, zoomed images and videos.
+             */
             productList: [{
                 images: {
                     main: [

@@ -1,4 +1,7 @@
 <template>
+    <!-- 
+        Product textual information section
+    -->
     <div class="grid grid-cols-subgrid grid-cols-1 grid-rows-9 p-5">
         <div>
             <span class="uppercase text-sm font-light">{{ detail.brand }}</span>
@@ -53,12 +56,10 @@
 <script>
 export default {
     name: 'ProductDetail',
-    data() {
-        return {
-
-        }
-    },
     props: {
+        /**
+         * Prop to accept the textual infomation of the product. Media information is not required in this component.
+         */
         detail: {
             type: Object,
             required: true

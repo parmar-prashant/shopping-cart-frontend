@@ -14,6 +14,10 @@
 import AppHeader from '../src/components/skeleton/AppHeader.vue';
 import Product from './components/Product.vue';
 
+/**
+ * This component is the root component.
+ * Based on the test requirements, I have divided the whole app into AppHeader and the body section i.e. Product information.
+ */
 export default {
   name: 'App',
   components: {
