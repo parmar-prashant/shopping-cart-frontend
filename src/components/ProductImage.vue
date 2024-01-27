@@ -26,7 +26,7 @@
                 <path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
             </svg>
         </div>
-        
+
         <!--
             Thumbnail section which is a component used to display thumbnails of the given media files.
         -->
@@ -45,13 +45,13 @@
                     <div class="grid grid-rows-2 relative sm:grid-cols-4">
                         <div class="flex col-span-3 items-center justify-center m-2 relative">
                             <img :src="product.images.zoomed[currentIndex].path" class="w-60 h-80 sm:w-64 h-80"
-                                @touchstart="touchHandler($event); onTouchStart($event)" @touchmove="onTouchMove" @touchend="onTouchEnd"
-                                ref="modalImage" />
+                                @touchstart="touchHandler($event); onTouchStart($event)" @touchmove="onTouchMove"
+                                @touchend="onTouchEnd" ref="modalImage" />
                         </div>
                         <div class="p-5 border-4 h-fit">
                             <p class="font-bold text-md">{{ productNameWithColorFormat }}</p>
-                            <Thumbnail :thumbnails=" product.images.thumbnail " contentType="image"
-                                @syncCurrentIndex=" displaySelectedMedia " :currentIndex=" currentIndex "></Thumbnail>
+                            <Thumbnail :thumbnails="product.images.thumbnail" contentType="image"
+                                @syncCurrentIndex="displaySelectedMedia" :currentIndex="currentIndex"></Thumbnail>
                         </div>
                     </div>
                 </template>
@@ -59,17 +59,17 @@
                     <div class="grid grid-rows-2 relative sm:grid-cols-4 hidden sm:block">
                         <div class="flex col-span-3 items-center justify-center m-2">
                             <video class="videoPlayer" controls controlsList="nodownload nofullscreen noremoteplayback"
-                                :key=" product.images.main[currentIndex].id ">
-                                <template v-if=" product.images.main[currentIndex].id !== undefined ">
-                                    <source :src=" product.videos[product.images.main[currentIndex].id].url "
+                                :key="product.images.main[currentIndex].id">
+                                <template v-if="product.images.main[currentIndex].id !== undefined">
+                                    <source :src="product.videos[product.images.main[currentIndex].id].url"
                                         type="video/mp4">
                                 </template>
                             </video>
                         </div>
                         <div class="p-5 border-4">
                             <p class="font-bold text-md">{{ productNameWithColorFormat }}</p>
-                            <Thumbnail :thumbnails=" product.images.thumbnail " contentType="video"
-                                @syncCurrentIndex=" displaySelectedMedia " :currentIndex=" currentIndex "></Thumbnail>
+                            <Thumbnail :thumbnails="product.images.thumbnail" contentType="video"
+                                @syncCurrentIndex="displaySelectedMedia" :currentIndex="currentIndex"></Thumbnail>
                         </div>
                     </div>
                 </template>
@@ -119,10 +119,6 @@ export default {
                 { id: "video", label: 'Video', visible: true },
             ],
             /**
-             * Property to track number of taps done by a user (Mobile version).
-             */
-            tap: 0,
-            /**
              * Boolean flag property for the double tap zoom in/out functionality for the media files (Mobile version).
              */
             isZoomIn: false,
@@ -136,7 +132,7 @@ export default {
             /**
              * Property to track the time difference between the two taps to determine whether it is a valid double tap or not (Mobile version).
              */
-            intitialTouchTime: null,
+            tapTimer: null,
             /**
              * Boolean flag to track whether the user is in double tap zoom mode or not as to handle swipe feature along with it (Mobile version).
              */
@@ -232,21 +228,19 @@ export default {
          * Method to display the zoom im/out version of the image by double tap (Mobile version).
          */
         touchHandler(event) {
-            this.tap++;
+            var self = this;
+            var isValidDoubleClick = false;
 
-            if (this.tap === 1) {
-                this.intitialTouchTime = Date.now();
-            }
-            if (this.tap === 2) {
-                var difference = Date.now() - this.intitialTouchTime;
-                var isValidDoubleClick = false;
-                if (difference < 150) {
-                    isValidDoubleClick = true;
-                } else {
-                    // Not a proper double tap
-                }
-                this.tap = 0;
-                this.intitialTouchTime = null;
+            // If set time out then it is a single tap else double tap
+            if (this.tapTimer == null) {
+                this.tapTimer = setTimeout(function () {
+                    self.tapTimer = null;
+                    isValidDoubleClick = false;
+                }, 500)
+            } else {
+                clearTimeout(this.tapTimer);
+                this.tapTimer = null;
+                isValidDoubleClick = true;
             }
 
             if (isValidDoubleClick) {
@@ -266,7 +260,6 @@ export default {
                     this.isPopupZoomMode = true;
                 }
                 modalImage.style.transition = 'transform 0.3s ease';
-                this.tap = 0;
             }
         },
         /**
