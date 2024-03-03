@@ -1,4 +1,4 @@
-# The Big Phone Store - Frontend Test Project
+# Shopping cart
 
 This project uses Vue 3, Tailwind CSS framework with no external libraries.
 
